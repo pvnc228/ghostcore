@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1.0",
+  "profile_name": "minimalist",
+  "desktop": {
+    "wm": "none",
+    "theme": "adwaita",
+    "icon_theme": "adwaita"
+  },
+  "terminal": {
+    "shell": "bash",
+    "font": "monospace"
+  },
+  "keyboard": {
+    "layout": "us"
+  },
+  "packages": {
+    "categories": ["system-tools"]
+  },
+  "security": {
+    "paranoia_level": "hardened",
+    "enable_firewall": true
+  },
+  "network": {
+    "enable_bluetooth": false,
+    "enable_vpn": "none",
+    "timezone": "UTC",
+    "locale": "en_US.UTF-8"
+  }
+}

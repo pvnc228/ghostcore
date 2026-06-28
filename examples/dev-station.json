@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "profile_name": "dev-station",
+  "desktop": {
+    "wm": "hyprland",
+    "theme": "catppuccin-mocha",
+    "icon_theme": "papirus",
+    "browser": "firefox",
+    "terminal": "alacritty"
+  },
+  "terminal": {
+    "shell": "zsh",
+    "font": "JetBrains Mono",
+    "font_size": 12
+  },
+  "keyboard": {
+    "layout": "us",
+    "caps_as_ctrl": true
+  },
+  "packages": {
+    "categories": ["development", "system-tools", "communication"],
+    "explicit_allowlist": ["docker", "kubectl"],
+    "explicit_blocklist": []
+  },
+  "security": {
+    "paranoia_level": "standard",
+    "enable_firewall": true,
+    "full_disk_encryption": true,
+    "camera_access": "deny"
+  },
+  "network": {
+    "hostname": "ghost-dev",
+    "enable_bluetooth": true,
+    "enable_vpn": "tailscale",
+    "timezone": "Europe/Kyiv",
+    "locale": "en_US.UTF-8"
+  },
+  "git": {
+    "username": "mist8",
+    "email": "dev@ghostcore.local"
+  }
+}

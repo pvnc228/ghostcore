@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ghostcore.dev/schemas/ux_fingerprint.json",
+  "title": "UX Fingerprint",
+  "description": "A strictly validated profile of user preferences for GhostCore OS declarative system generation.",
+
+  "type": "object",
+  "required": [
+    "schema_version",
+    "profile_name",
+    "desktop",
+    "terminal",
+    "keyboard",
+    "packages",
+    "security",
+    "network"
+  ],
+
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0",
+      "description": "Schema version — must be 0.1.0 for Phase 0"
+    },
+
+    "profile_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "description": "Human-readable profile identifier (used as NixOS host name)"
+    },
+
+    "desktop": {
+      "type": "object",
+      "required": ["wm", "theme", "icon_theme"],
+      "properties": {
+        "wm": {
+          "type": "string",
+          "enum": ["hyprland", "sway", "i3", "gnome", "kde", "xfce", "none"],
+          "description": "Window manager / desktop environment"
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["catppuccin-mocha", "catppuccin-latte", "dracula", "nord", "gruvbox-dark", "gruvbox-light", "tokyo-night", "rose-pine", "adwaita", "breeze"],
+          "description": "GTK/QT color theme"
+        },
+        "icon_theme": {
+          "type": "string",
+          "enum": ["papirus", "tela", "colloid", "breeze", "adwaita", "nordic"],
+          "description": "Icon theme"
+        },
+        "browser": {
+          "type": "string",
+          "enum": ["firefox", "chromium", "librewolf", "floorp", "qutebrowser", "nyxt"],
+          "description": "Default web browser"
+        },
+        "terminal": {
+          "type": "string",
+          "enum": ["alacritty", "foot", "kitty", "weztil", "ghostty", "konsole"],
+          "description": "Terminal emulator for the desktop"
+        },
+        "wallpaper": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "Optional wallpaper path or URL (must start with / or http)"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "terminal": {
+      "type": "object",
+      "required": ["shell", "font"],
+      "properties": {
+        "shell": {
+          "type": "string",
+          "enum": ["bash", "zsh", "fish", "nushell", "dash"],
+          "description": "Default login shell"
+        },
+        "font": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Terminal font name (e.g. 'JetBrains Mono')"
+        },
+        "font_size": {
+          "type": "number",
+          "minimum": 6,
+          "maximum": 32,
+          "description": "Terminal font size in points"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "keyboard": {
+      "type": "object",
+      "required": ["layout"],
+      "properties": {
+        "layout": {
+          "type": "string",
+          "enum": ["us", "ua", "ru", "de", "fr", "gb", "dvorak", "colemak"],
+          "description": "XKB keyboard layout"
+        },
+        "variant": {
+          "type": "string",
+          "maxLength": 16,
+          "description": "XKB layout variant (e.g. 'phonetic' for ru)"
+        },
+        "caps_as_ctrl": {
+          "type": "boolean",
+          "description": "Remap Caps Lock to Control"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "packages": {
+      "type": "object",
+      "required": ["categories"],
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["development", "media", "gaming", "office", "communication", "system-tools", "creative", "security"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Package categories to install"
+        },
+        "explicit_allowlist": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._+-]+$"
+          },
+          "maxItems": 100,
+          "description": "Specific Nix package names to include (e.g. 'htop', 'neovim')"
+        },
+        "explicit_blocklist": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._+-]+$"
+          },
+          "description": "Specific Nix package names to never include"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "security": {
+      "type": "object",
+      "required": ["paranoia_level"],
+      "properties": {
+        "paranoia_level": {
+          "type": "string",
+          "enum": ["minimal", "standard", "paranoid", "hardened"],
+          "description": "Security posture — determines firewall, MAC (selinux/apparmor), kernel hardening flags"
+        },
+        "enable_firewall": {
+          "type": "boolean",
+          "description": "Enable iptables/nftables firewall"
+        },
+        "full_disk_encryption": {
+          "type": "boolean",
+          "description": "Whether LUKS encryption was set up at install time (informational)"
+        },
+        "camera_access": {
+          "type": "string",
+          "enum": ["allow", "deny", "ask"]
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "network": {
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$",
+          "maxLength": 63,
+          "description": "System hostname"
+        },
+        "enable_bluetooth": {
+          "type": "boolean"
+        },
+        "enable_vpn": {
+          "type": "string",
+          "enum": ["none", "wireguard", "openvpn", "tailscale"]
+        },
+        "timezone": {
+          "type": "string",
+          "pattern": "^([A-Za-z_]+/[A-Za-z_]+|UTC)$",
+          "description": "IANA timezone (e.g. 'Europe/Kyiv' or 'UTC')"
+        },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2}_[A-Z]{2}\\.UTF-8$",
+          "description": "System locale (e.g. 'en_US.UTF-8')"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "git": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 128
+        },
+        "signing_key": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "GPG key ID for commit signing"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+
+  "additionalProperties": false
+}
