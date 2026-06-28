@@ -116,7 +116,7 @@ TERMINAL_PACKAGES: dict[str, str] = {
     "alacritty": "alacritty",
     "foot": "foot",
     "kitty": "kitty",
-    "weztil": "wezterm",
+    "wezterm": "wezterm",
     "ghostty": "ghostty",
     "konsole": "konsole",
 }

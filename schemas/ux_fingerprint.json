@@ -57,7 +57,7 @@
         },
         "terminal": {
           "type": "string",
-          "enum": ["alacritty", "foot", "kitty", "weztil", "ghostty", "konsole"],
+          "enum": ["alacritty", "foot", "kitty", "wezterm", "ghostty", "konsole"],
           "description": "Terminal emulator for the desktop"
         },
         "wallpaper": {
